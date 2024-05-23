@@ -1,15 +1,19 @@
-import { IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class GetFoodFilterDto {
   @IsOptional()
-  foodName?: string;
+  @IsString()
+  foodName: string;
 
   @IsOptional()
-  category?: string;
+  @IsString()
+  category: string;
 
   @IsOptional()
-  restaurant?: string;
+  @IsString()
+  restaurant: string;
 
   @IsOptional()
-  rating?: number;
+  @IsNumber()
+  rating: number;
 }

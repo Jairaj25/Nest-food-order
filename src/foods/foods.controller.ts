@@ -12,6 +12,7 @@ import { FoodsService } from './foods.service';
 import { Food } from './food.model';
 import { CreateFoodDto } from './dto/create-foods.dto';
 import { GetFoodFilterDto } from './dto/get-food-filter.dto';
+import { UpdateFoodPriceDto } from './dto/update-food-price.dto';
 
 @Controller('foods')
 export class FoodsController {
@@ -42,7 +43,11 @@ export class FoodsController {
   }
 
   @Patch('/:id/price')
-  updateFoodPrice(@Param('id') id: string, @Body('price') price: number): Food {
+  updateFoodPrice(
+    @Param('id') id: string,
+    @Body() updateFoodPriceDto: UpdateFoodPriceDto,
+  ): Food {
+    const { price } = updateFoodPriceDto;
     return this.foodService.updateFoodPrice(id, price);
   }
 }
