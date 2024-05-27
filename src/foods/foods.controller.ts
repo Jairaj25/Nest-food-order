@@ -9,36 +9,32 @@ import {
   Query,
 } from '@nestjs/common';
 import { FoodsService } from './foods.service';
-import { Food } from './food.model';
 import { CreateFoodDto } from './dto/create-foods.dto';
 import { GetFoodFilterDto } from './dto/get-food-filter.dto';
 import { UpdateFoodPriceDto } from './dto/update-food-price.dto';
+import { foodEntity } from './food.entity';
 
 @Controller('foods')
 export class FoodsController {
   constructor(private foodService: FoodsService) {}
 
-  @Get()
-  getFoods(@Query() filterDto: GetFoodFilterDto): Food[] {
-    if (Object.keys(filterDto).length) {
-      return this.foodService.getFoodWithFilter(filterDto);
-    } else {
-      return this.foodService.getAllFoods();
-    }
+  @Get('/search')
+  getFoods(@Query() filterDto: GetFoodFilterDto): Promise<foodEntity[]> {
+    return this.foodService.getFoods(filterDto);
   }
 
-  //   @Get('/:category')
-  //   getFoodsbyCategory(@Param('category') category: string): Food[] {
-  //     return this.foodService.getFoodByCategory(category);
-  //   }
+  @Get('/:id')
+  getFoodById(@Param('id') id: string): Promise<foodEntity> {
+    return this.foodService.getFoodById(id);
+  }
 
   @Post()
-  createFood(@Body() createfooddto: CreateFoodDto): Food {
-    return this.foodService.createFood(createfooddto);
+  createFood(@Body() createFoodDto: CreateFoodDto): Promise<foodEntity> {
+    return this.foodService.createFood(createFoodDto);
   }
 
   @Delete('/:id')
-  deleteFoodById(@Param('id') id: string): void {
+  deleteFoodById(@Param('id') id: string): Promise<void> {
     return this.foodService.deleteFoodById(id);
   }
 
@@ -46,7 +42,7 @@ export class FoodsController {
   updateFoodPrice(
     @Param('id') id: string,
     @Body() updateFoodPriceDto: UpdateFoodPriceDto,
-  ): Food {
+  ): Promise<foodEntity> {
     const { price } = updateFoodPriceDto;
     return this.foodService.updateFoodPrice(id, price);
   }

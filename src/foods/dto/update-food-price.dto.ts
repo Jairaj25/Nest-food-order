@@ -1,6 +1,6 @@
-import { IsNumber } from 'class-validator';
+import { IsDecimal } from 'class-validator';
 
 export class UpdateFoodPriceDto {
-  @IsNumber()
+  @IsDecimal()
   price: number;
 }

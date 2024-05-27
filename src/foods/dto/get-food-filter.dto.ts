@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsDecimal, IsOptional, IsString } from 'class-validator';
 
 export class GetFoodFilterDto {
   @IsOptional()
@@ -14,6 +14,6 @@ export class GetFoodFilterDto {
   restaurant: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsDecimal()
   rating: number;
 }

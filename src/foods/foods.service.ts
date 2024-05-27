@@ -1,87 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Food } from './food.model';
-import { v4 as uuid } from 'uuid';
 import { CreateFoodDto } from './dto/create-foods.dto';
 import { GetFoodFilterDto } from './dto/get-food-filter.dto';
+import { FoodRepository } from './food.repository';
+import { foodEntity } from './food.entity';
 
 @Injectable()
 export class FoodsService {
-  private foods: Food[] = [];
+  constructor(private foodRepository: FoodRepository) {}
 
-  getAllFoods() {
-    return this.foods;
+  getFoods(foodFilterDto: GetFoodFilterDto): Promise<foodEntity[]> {
+    return this.foodRepository.getFoods(foodFilterDto);
   }
 
-  getFoodWithFilter(filterDto: GetFoodFilterDto): Food[] {
-    const { foodName, category, restaurant, rating } = filterDto;
-
-    let food = this.getAllFoods();
-
-    if (foodName) {
-      food = this.foods.filter((item) => item.foodName === foodName);
-    }
-
-    if (category) {
-      food = this.foods.filter((item) =>
-        item.category
-          .map((cat) => cat.toLowerCase())
-          .includes(category.toLowerCase()),
-      );
-    }
-
-    if (restaurant) {
-      food = this.foods.filter((item) => item.restaurant === restaurant);
-    }
-
-    if (rating) {
-      food = this.foods.filter((item) => item.rating === rating);
-    }
-
-    return food;
-  }
-
-  getFoodById(id: string): Food {
-    const foundFood = this.foods.find((item) => item.id === id);
+  async getFoodById(id: string): Promise<foodEntity> {
+    const foundFood = await this.foodRepository.findOneBy({ id });
 
     if (!foundFood) {
-      throw new NotFoundException();
+      throw new NotFoundException(`Food with ID "${id}" does not exist`);
     }
 
     return foundFood;
   }
 
-  //   getFoodByCategory(category: string) {
-  //     return this.foods.filter((item) =>
-  //       item.category
-  //         .map((cat) => cat.toLowerCase())
-  //         .includes(category.toLowerCase()),
-  //     );
-  //   }
-
-  createFood(CreateFoodDto: CreateFoodDto): Food {
-    const { foodName, image, foodPrice, restaurant, category, rating } =
-      CreateFoodDto;
-    const food: Food = {
-      id: uuid(),
-      foodName,
-      image,
-      foodPrice,
-      restaurant,
-      category,
-      rating,
-    };
-    this.foods.push(food);
-    return food;
+  createFood(createFoodDto: CreateFoodDto): Promise<foodEntity> {
+    return this.foodRepository.createFood(createFoodDto);
   }
 
-  deleteFoodById(id: string): void {
-    const foundFood = this.getFoodById(id);
-    this.foods = this.foods.filter((item) => item.id !== foundFood.id);
+  async deleteFoodById(id: string): Promise<void> {
+    const deletedFood = await this.foodRepository.delete(id);
+
+    if (deletedFood.affected === 0) {
+      throw new NotFoundException(
+        `Food with ID "${id}" was not deleted. \n Reason: Food with ID "${id}" does not exists`,
+      );
+    }
   }
 
-  updateFoodPrice(id: string, price: number) {
-    const food = this.getFoodById(id);
-    food.foodPrice = price;
-    return food;
+  async updateFoodPrice(id: string, price: number): Promise<foodEntity> {
+    const foundFood = await this.getFoodById(id);
+    foundFood.foodPrice = price;
+    await this.foodRepository.save(foundFood);
+    return foundFood;
   }
 }
