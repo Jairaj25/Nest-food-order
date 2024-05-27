@@ -11,14 +11,14 @@ import {
 import { FoodsService } from './foods.service';
 import { CreateFoodDto } from './dto/create-foods.dto';
 import { GetFoodFilterDto } from './dto/get-food-filter.dto';
-import { UpdateFoodPriceDto } from './dto/update-food-price.dto';
+import { UpdateFoodDto } from './dto/update-food.dto';
 import { foodEntity } from './food.entity';
 
 @Controller('foods')
 export class FoodsController {
   constructor(private foodService: FoodsService) {}
 
-  @Get('/search')
+  @Get('/searchfood')
   getFoods(@Query() filterDto: GetFoodFilterDto): Promise<foodEntity[]> {
     return this.foodService.getFoods(filterDto);
   }
@@ -28,7 +28,7 @@ export class FoodsController {
     return this.foodService.getFoodById(id);
   }
 
-  @Post()
+  @Post('/addfood')
   createFood(@Body() createFoodDto: CreateFoodDto): Promise<foodEntity> {
     return this.foodService.createFood(createFoodDto);
   }
@@ -38,12 +38,11 @@ export class FoodsController {
     return this.foodService.deleteFoodById(id);
   }
 
-  @Patch('/:id/price')
-  updateFoodPrice(
+  @Patch('/updatefood/:id')
+  updateFood(
     @Param('id') id: string,
-    @Body() updateFoodPriceDto: UpdateFoodPriceDto,
+    @Body() updateFoodDto: UpdateFoodDto,
   ): Promise<foodEntity> {
-    const { price } = updateFoodPriceDto;
-    return this.foodService.updateFoodPrice(id, price);
+    return this.foodService.updateFood(id, updateFoodDto);
   }
 }

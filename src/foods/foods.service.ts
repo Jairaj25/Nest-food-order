@@ -3,6 +3,7 @@ import { CreateFoodDto } from './dto/create-foods.dto';
 import { GetFoodFilterDto } from './dto/get-food-filter.dto';
 import { FoodRepository } from './food.repository';
 import { foodEntity } from './food.entity';
+import { UpdateFoodDto } from './dto/update-food.dto';
 
 @Injectable()
 export class FoodsService {
@@ -36,9 +37,33 @@ export class FoodsService {
     }
   }
 
-  async updateFoodPrice(id: string, price: number): Promise<foodEntity> {
+  async updateFood(
+    id: string,
+    updateFoodDto: UpdateFoodDto,
+  ): Promise<foodEntity> {
+    const { foodName, category, restaurant, rating, price } = updateFoodDto;
     const foundFood = await this.getFoodById(id);
-    foundFood.foodPrice = price;
+
+    switch (true) {
+      case !!foodName:
+        foundFood.foodName = foodName;
+        break;
+      case !!category:
+        foundFood.category = category;
+        break;
+      case !!restaurant:
+        foundFood.restaurant = restaurant;
+        break;
+      case !!rating:
+        foundFood.rating = rating;
+        break;
+      case !!price:
+        foundFood.foodPrice = price;
+        break;
+      default:
+        break;
+    }
+
     await this.foodRepository.save(foundFood);
     return foundFood;
   }

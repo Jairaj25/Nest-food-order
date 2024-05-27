@@ -11,9 +11,6 @@ export class FoodRepository extends Repository<foodEntity> {
   }
 
   async getFoods(foodFilterDto: GetFoodFilterDto): Promise<foodEntity[]> {
-    console.log('====================================');
-    console.log(foodFilterDto);
-    console.log('====================================');
     const { foodName, category, restaurant, rating } = foodFilterDto;
 
     const query = this.createQueryBuilder('foodEntity');
@@ -33,7 +30,7 @@ export class FoodRepository extends Repository<foodEntity> {
 
     if (restaurant) {
       query.andWhere('LOWER(foodEntity.restaurant) LIKE LOWER(:restaurant)', {
-        restaurant: `%${restaurant}%`,
+        restaurant: `${restaurant}`,
       });
     }
 
