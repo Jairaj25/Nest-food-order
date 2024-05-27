@@ -25,7 +25,10 @@ export class FoodRepository extends Repository<foodEntity> {
     }
 
     if (category) {
-      query.andWhere(':category = ANY (foodEntity.category)', { category });
+      query.andWhere(
+        "LOWER(:category) = ANY (string_to_array(LOWER(foodEntity.category), ','))",
+        { category: category.toLowerCase() },
+      );
     }
 
     if (restaurant) {
