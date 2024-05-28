@@ -2,18 +2,19 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFoodDto } from './dto/create-foods.dto';
 import { GetFoodFilterDto } from './dto/get-food-filter.dto';
 import { FoodRepository } from './food.repository';
-import { foodEntity } from './food.entity';
+import { Food } from './food.entity';
 import { UpdateFoodDto } from './dto/update-food.dto';
+import { CreateFoodBulkDto } from './dto/create-bulk-food.dto';
 
 @Injectable()
 export class FoodsService {
   constructor(private foodRepository: FoodRepository) {}
 
-  getFoods(foodFilterDto: GetFoodFilterDto): Promise<foodEntity[]> {
+  getFoods(foodFilterDto: GetFoodFilterDto): Promise<Food[]> {
     return this.foodRepository.getFoods(foodFilterDto);
   }
 
-  async getFoodById(id: string): Promise<foodEntity> {
+  async getFoodById(id: string): Promise<Food> {
     const foundFood = await this.foodRepository.findOneBy({ id });
 
     if (!foundFood) {
@@ -23,8 +24,12 @@ export class FoodsService {
     return foundFood;
   }
 
-  createFood(createFoodDto: CreateFoodDto): Promise<foodEntity> {
+  createFood(createFoodDto: CreateFoodDto): Promise<Food> {
     return this.foodRepository.createFood(createFoodDto);
+  }
+
+  createBulk(createFoodBulkDto: CreateFoodBulkDto): Promise<Food[]> {
+    return this.foodRepository.createBulk(createFoodBulkDto);
   }
 
   async deleteFoodById(id: string): Promise<void> {
@@ -37,10 +42,7 @@ export class FoodsService {
     }
   }
 
-  async updateFood(
-    id: string,
-    updateFoodDto: UpdateFoodDto,
-  ): Promise<foodEntity> {
+  async updateFood(id: string, updateFoodDto: UpdateFoodDto): Promise<Food> {
     const { foodName, category, restaurant, rating, price } = updateFoodDto;
     const foundFood = await this.getFoodById(id);
 
