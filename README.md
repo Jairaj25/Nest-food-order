@@ -13,11 +13,11 @@ $ docker run --name Nest-Postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d 
 ```
 Setup Database in pgAdmin with below details:
 
-host: 'localhost',
-port: 5432,
-username: 'postgres',
-password: 'postgres',
-database: 'Food-order-management',
+- host: 'localhost',
+- port: 5432,
+- username: 'postgres',
+- password: 'postgres',
+- database: 'Food-order-management',
 
 
 Install nest dependecies
