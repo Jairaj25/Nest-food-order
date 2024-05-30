@@ -12,9 +12,6 @@ export class OrderRepository extends Repository<Order> {
 
   async getAllOrders(): Promise<Order[]> {
     const foundOrder = await this.find();
-    console.log('====================================');
-    console.log(foundOrder);
-    console.log('====================================');
     return foundOrder;
   }
 
