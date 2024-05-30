@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { OrderRepository } from './order.repository';
 import { Order } from './order.entity';
-import { GetOrderFilterDto } from './dto/get-order-filter.dto';
 import { FoodRepository } from '../foods/food.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 
@@ -21,8 +20,8 @@ export class OrdersService {
     return this.orderRepository.getAllOrders();
   }
 
-  getOrderByUserId(getOrderFilterDto: GetOrderFilterDto): Promise<Order> {
-    return this.orderRepository.getOrdersByUserId(getOrderFilterDto);
+  getOrderByUserId(userId: string): Promise<Order> {
+    return this.orderRepository.getOrdersByUserId(userId);
   }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
