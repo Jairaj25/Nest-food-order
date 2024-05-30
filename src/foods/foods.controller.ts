@@ -19,7 +19,7 @@ import { CreateFoodBulkDto } from './dto/create-bulk-food.dto';
 export class FoodsController {
   constructor(private foodService: FoodsService) {}
 
-  @Get('/searchfood')
+  @Get('/search')
   getFoods(@Query() filterDto: GetFoodFilterDto): Promise<Food[]> {
     return this.foodService.getFoods(filterDto);
   }
@@ -29,7 +29,7 @@ export class FoodsController {
     return this.foodService.getFoodById(id);
   }
 
-  @Post('/addfood')
+  @Post('/add')
   createFood(@Body() createFoodDto: CreateFoodDto): Promise<Food> {
     return this.foodService.createFood(createFoodDto);
   }
@@ -41,12 +41,12 @@ export class FoodsController {
     return this.foodService.createBulk(createFoodBulkDto);
   }
 
-  @Delete('/:id')
+  @Delete('/remove/:id')
   deleteFoodById(@Param('id') id: string): Promise<void> {
     return this.foodService.deleteFoodById(id);
   }
 
-  @Patch('/updatefood/:id')
+  @Patch('/update/:id')
   updateFood(
     @Param('id') id: string,
     @Body() updateFoodDto: UpdateFoodDto,
