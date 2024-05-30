@@ -1,10 +1,10 @@
 ## Description
 
-Back-End System for Food Order Website. CRUD APIs for Food Lists, User's Orders, User's Carts
+Back-End System for Food Order Website. 
 
 ## Installation
 
-install Docker and pgAdmin.
+Install Docker and pgAdmin.
 
 Run below code to initiate docker container
 
