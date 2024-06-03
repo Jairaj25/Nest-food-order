@@ -56,7 +56,6 @@ export class OrderRepository extends Repository<Order> {
       order.orderItems = orderItems;
 
       const savedOrder = await this.save(order);
-
       return savedOrder;
     } catch (error) {
       if (
